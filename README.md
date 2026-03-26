@@ -10,7 +10,7 @@ The full spec is a product requirements document covering the problem, opportuni
 
 ## Who This Is For
 
-Consultants, strategists, analysts, researchers, and other knowledge workers who have moved past single-chat AI usage and are running multiple instances with different roles across different tools. If you've built your own system by hand and you're spending increasing time routing context between platforms, this is for you.
+Product managers, consultants, strategists, analysts, researchers, and other knowledge workers who have moved past single-chat AI usage and are running multiple instances with different roles across different tools. If you've built your own system by hand and you're spending increasing time routing context between platforms, this is for you.
 
 ## Why This Matters
 
