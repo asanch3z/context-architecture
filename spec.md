@@ -1,39 +1,19 @@
 # Cross-Platform AI Orchestration for Knowledge Work
-
-**Product Spec v0.2**
+## Product Spec v0.3
 
 **Author:** Alex Sanchez
-**Date:** March 25, 2026
+**Date:** March 26, 2026
 **Status:** Working draft, published for public iteration
 
 ---
 
 ## Problem
 
-Knowledge workers who operate multiple AI instances across different platforms (Claude, OpenAI, browser-based agents, and others) hit a coordination ceiling that erodes the time savings AI provides. Context doesn't flow between platforms. Corrections made in one instance don't propagate to others. Every handoff requires the human to write a summary, decide what the receiving instance needs, reformat it as a prompt, and deliver it manually. The more specialized the system becomes, the more time the human spends routing rather than thinking.
-
-In observed practice, this manifests as:
-
-- 5-10 page handoff documents written at thread boundaries
-- Terminology corrections that resurface across instances because they weren't propagated
-- Session starts consumed by re-establishing context that was already developed elsewhere
-- Output quality that degrades whenever context transfer loses fidelity
-
-The AI makes the work better. The coordination overhead makes the human the bottleneck of their own system.
-
----
+Knowledge workers who operate multiple AI instances across different platforms (Claude, OpenAI, browser-based agents, and others) hit a coordination ceiling that erodes the time savings AI provides. Context doesn't flow between platforms. Corrections made in one instance don't propagate to others. Every handoff requires the human to write a summary, decide what the receiving instance needs, reformat it as a prompt, and deliver it manually. The more specialized the system becomes, the more time the human spends routing rather than thinking. In observed practice, this manifests as 5-10 page handoff documents written at thread boundaries, terminology corrections that resurface across instances because they weren't propagated, session starts consumed by re-establishing context that was already developed elsewhere, and output quality that degrades whenever context transfer loses fidelity. The AI makes the work better. The coordination overhead makes the human the bottleneck of their own system.
 
 ## Opportunity
 
-Nobody has built coordination infrastructure for multi-instance, multi-platform AI workflows outside of software development. The entire multi-agent tooling landscape (Claude Code Agent Teams, Gas Town, Multiclaude, Ruflo) is built for engineering: agents writing code, running tests, reviewing PRs. Knowledge workers (consultants, strategists, analysts, researchers) who have moved past single-chat AI usage have no equivalent. They're building their own systems by hand, which means the ones who are furthest ahead are also the ones most constrained by the lack of infrastructure.
-
-A lightweight coordination layer using existing tools (Google Drive for shared state, browser automation for dispatch, structured protocols for summaries) could:
-
-- Demonstrate the architecture without requiring new infrastructure
-- Serve as a proof of concept for a broader product
-- Establish a reference pattern for a space where everyone is talking about context but nobody has shipped a working system for non-engineering knowledge work
-
----
+Nobody has built coordination infrastructure for multi-instance, multi-platform AI workflows outside of software development. The entire multi-agent tooling landscape (Claude Code Agent Teams, Gas Town, Multiclaude, Ruflo) is built for engineering: agents writing code, running tests, reviewing PRs. Knowledge workers (consultants, strategists, analysts, researchers) who have moved past single-chat AI usage have no equivalent. They're building their own systems by hand, which means the ones who are furthest ahead are also the ones most constrained by the lack of infrastructure. A lightweight coordination layer using existing tools (Google Drive for shared state, browser automation for dispatch, structured protocols for summaries) could demonstrate the architecture without requiring new infrastructure, serve as a proof of concept for a broader product, and establish a reference pattern for a space where everyone is talking about context but nobody has shipped a working system for non-engineering knowledge work.
 
 ## Solution
 
@@ -80,10 +60,9 @@ A human-directed orchestration system where the infrastructure handles context t
 └──────────────────────────────────────────────────────────┘
 ```
 
----
-
 ## Dispatch Workflow
 
+```
 1. Human completes a session in any instance
 2. Instance writes summary per protocol to shared memory (Google Drive)
 3. Human triggers dispatch (or dispatch agent runs on schedule)
@@ -94,6 +73,7 @@ A human-directed orchestration system where the infrastructure handles context t
    c. Captures acknowledgment
    d. Writes dispatch log to shared memory
 6. Human reviews dispatch log at next session start
+```
 
 ---
 
@@ -156,7 +136,7 @@ See [summary-protocol.md](summary-protocol.md) for the standalone template.
 **US-1: Write summary to shared memory**
 As a knowledge worker finishing an AI session, I want the instance to produce a structured summary and save it to the shared memory layer, so that the context from this session is available to other instances without me rewriting it.
 
-Acceptance criteria:
+*Acceptance criteria:*
 - Summary follows the protocol template
 - Summary is saved to /summaries/ with instance name and date
 - Summary is readable by any instance with access to the shared memory layer
@@ -165,7 +145,7 @@ Acceptance criteria:
 **US-2: Read summary from shared memory**
 As a knowledge worker starting an AI session, I want the instance to read the latest summaries from other instances, so that I don't spend the first 10 minutes of every session re-establishing context that already exists.
 
-Acceptance criteria:
+*Acceptance criteria:*
 - Instance can read markdown files from /summaries/
 - Instance incorporates relevant context without being explicitly prompted with the full content
 - Time to read and absorb: under 1 minute
@@ -173,7 +153,7 @@ Acceptance criteria:
 **US-3: Dispatch context between platforms**
 As a knowledge worker, I want the dispatch agent to deliver context from one platform to another, so that I don't have to manually copy-paste between platforms.
 
-Acceptance criteria:
+*Acceptance criteria:*
 - Dispatch agent navigates to shared memory and reads new summaries
 - Dispatch agent navigates to target platform and delivers context via native input
 - Dispatch agent writes a dispatch log confirming delivery
@@ -185,7 +165,7 @@ Acceptance criteria:
 **US-4: Propagate corrections globally**
 As a knowledge worker, I want a correction made in one instance to propagate to all other instances, so that I don't encounter the same error in a different context.
 
-Acceptance criteria:
+*Acceptance criteria:*
 - Correction is written to /memory/global_corrections.md
 - On next dispatch cycle, dispatch agent delivers the correction to all instances
 - Each instance acknowledges and incorporates the correction
@@ -193,7 +173,7 @@ Acceptance criteria:
 **US-5: Dispatch log review**
 As a knowledge worker, I want to review what was delivered and to whom, so that I can verify context quality and catch errors before they compound.
 
-Acceptance criteria:
+*Acceptance criteria:*
 - Dispatch log saved to /dispatch_logs/ with date
 - Log includes: what was delivered, to which instance, timestamp, and any errors
 - Readable in under 2 minutes
@@ -203,7 +183,7 @@ Acceptance criteria:
 **US-6: Filtered dispatch**
 As a knowledge worker, I want to specify which parts of a summary go to which instance, so that each instance only receives context relevant to its role.
 
-Acceptance criteria:
+*Acceptance criteria:*
 - Summary protocol includes a "Context for other instances" field with target instance specified
 - Dispatch agent delivers only the relevant sections to each target
 - Irrelevant context is not delivered
@@ -211,7 +191,7 @@ Acceptance criteria:
 **US-7: Bidirectional dispatch**
 As a knowledge worker, I want the dispatch agent to capture output from a target instance after delivering context and write it back to shared memory, so that the response is available to all other instances.
 
-Acceptance criteria:
+*Acceptance criteria:*
 - Dispatch agent delivers context, waits for response, captures output
 - Output saved to /handoffs/ with source and target labeled
 - Available for next dispatch cycle
@@ -221,23 +201,14 @@ Acceptance criteria:
 ## Metrics
 
 ### Primary metrics
-
-**Context transfer time:** Time from "session ends in Instance A" to "context is available in Instance B."
-Baseline (manual): 10-20 minutes. Target (MVP): under 5 minutes.
-
-**Context fidelity:** Percentage of key information that arrives intact at the receiving instance.
-Baseline (manual): ~90% (some loss in every rewrite). Target (MVP): 95%+.
-
-**Session start time:** Time from "open a new session" to "productive work begins."
-Baseline: 5-15 minutes re-establishing context. Target: under 2 minutes.
+- **Context transfer time:** Time from "session ends in Instance A" to "context is available in Instance B." Baseline (manual): 10-20 minutes. Target (MVP): under 5 minutes.
+- **Context fidelity:** Percentage of key information that arrives intact at the receiving instance. Baseline (manual): ~90% (some loss in every rewrite). Target (MVP): 95%+.
+- **Session start time:** Time from "open a new session" to "productive work begins." Baseline: 5-15 minutes re-establishing context. Target: under 2 minutes.
 
 ### Guardrail metrics
-
-**False context:** Information delivered to an instance that is inaccurate or outdated. Must be 0%. One false correction propagated globally would undermine trust in the entire system.
-
-**Dispatch errors:** Failed deliveries (agent can't navigate, platform UI changed, timeout). Acceptable for MVP: under 20% failure rate (human catches and retries). Production target: under 5%.
-
-**Human review time per dispatch:** Time spent reviewing the dispatch log. Must stay under 2 minutes. If review time grows, the system is adding overhead rather than removing it.
+- **False context:** Information delivered to an instance that is inaccurate or outdated. Must be 0%. One false correction propagated globally would undermine trust in the entire system.
+- **Dispatch errors:** Failed deliveries (agent can't navigate, platform UI changed, timeout). Acceptable for MVP: under 20% failure rate (human catches and retries). Production target: under 5%.
+- **Human review time per dispatch:** Time spent reviewing the dispatch log. Must stay under 2 minutes. If review time grows, the system is adding overhead rather than removing it.
 
 ---
 
@@ -271,11 +242,58 @@ The spec documents what works, what doesn't, and what infrastructure would make 
 
 ---
 
+## The Context Sync Protocol
+
+The coordination mechanism at the core of this architecture is the **Context Sync Protocol**: a standardized way for AI instances across different platforms to share, update, and compound context over time. Think of it as MCP (Model Context Protocol) for memory state rather than tool access. MCP gives a model access to external tools. The Context Sync Protocol gives a model access to the evolving context of a multi-instance system.
+
+The protocol defines:
+- **What gets captured** at session end (the summary protocol template)
+- **Where it lives** (the shared memory layer with three levels: global, project, instance)
+- **How it flows** (dispatch from shared memory to target instances)
+- **How it compounds** (every session both consumes and produces context, updating the shared store)
+
+The closed-loop design is what makes this a learning system, not just a coordination tool. Each session starts by consuming context from the shared store. The instance does its work with that context, making decisions, producing output, identifying corrections. At session end, the instance produces a comprehensive summary that flows back to the store, updating memory at whichever level is appropriate (global correction, project update, or instance-specific knowledge). Next time any instance starts a session, it pulls from the updated store. The context gets richer with every cycle. It compounds.
+
+---
+
+## How This Differs from Multi-Model Tools
+
+Tools like MultipleChat, Magai, and TeamAI solve a different problem. They send the same prompt to multiple AI models (ChatGPT, Claude, Gemini, Grok) and merge, verify, or debate the responses to produce a single higher-quality answer. This is valuable for answer verification on single prompts.
+
+Context Architecture solves a fundamentally different problem: sustained coordination across ongoing work.
+
+| Dimension | Multi-model tools (e.g., MultipleChat) | Context Architecture |
+|-----------|---------------------------------------|---------------------|
+| Problem solved | Answer accuracy through model diversity | Long-term context coordination across platforms |
+| Time horizon | Single prompt, stateless | Weeks or months of sustained engagement |
+| Model roles | Interchangeable (all answer the same question) | Specialized (strategy, communications, observation) |
+| Memory | None between sessions | Three-level persistent memory (global, project, instance) |
+| Context | Resets per prompt | Accumulated, transferred, and compounded across sessions |
+| Human role | Prompt author, picks the best answer | Orchestrator, quality gate, strategic decision-maker |
+| Output | One verified answer | Sustained deliverable production across workstreams |
+| Core mechanism | Fan-out and merge | Context Sync Protocol (closed-loop, compounding) |
+
+These approaches are complementary, not competing. A knowledge worker could use a multi-model tool for quick research verification AND Context Architecture for managing their multi-instance system on a long-term engagement.
+
+---
+
+## Evolution Roadmap
+
+**Layer 1 (current spec, POC):** Google Drive as shared state, summary protocols, browser automation for dispatch. File-based, validates the pattern. Buildable in hours with zero additional cost.
+
+**Layer 2 (API middleware):** Universal context store (database), platform adapters inject context into API calls, closed-loop where each session both consumes and produces context. The store replaces Google Drive as the persistence layer. Each platform adapter knows how to read from and write to its platform's native context mechanism. Context depth is maintained because memory is injected at all three levels (global, project, instance) on every API call, and summaries flow back to update the store.
+
+**Layer 3 (protocol standard):** A Context Sync Protocol that platforms themselves support natively. Platforms expose endpoints for "here's what changed in this user's context since the last sync" and "here's a context update from another platform, incorporate it." This eliminates the need for middleware or browser automation. Requires industry adoption. One person defines the spec and advocates for it.
+
+**Layer 4 (product):** A platform with universal context store, platform adapters, sync engine, and human dashboard. Subscription replaces multiple individual AI subscriptions with a unified orchestration layer. The business model works best at team and enterprise scale, where the coordination layer provides governance, consistency, and shared context across team members and AI instances.
+
+---
+
 ## Changelog
 
-**v0.2 (March 25, 2026):** Rewritten in PRD format. Problem grounded in observed workflow. Added system diagram, dispatch workflow, user stories with acceptance criteria, metrics with guardrails, MVP scope. Generalized for public consumption.
-
-**v0.1 (March 25, 2026):** Initial draft. Internal only.
+- **v0.3 (March 26, 2026):** Named the Context Sync Protocol. Added closed-loop architecture insight (context compounds, system learns over time). Added competitive positioning vs. multi-model tools (MultipleChat, etc.). Added evolution roadmap (four layers from POC to product). Added "How This Differs" comparison table.
+- **v0.2 (March 25, 2026):** Rewritten in PRD format. Problem grounded in observed workflow. Added system diagram, dispatch workflow, user stories with acceptance criteria, metrics with guardrails, MVP scope. Generalized for public consumption.
+- **v0.1 (March 25, 2026):** Initial draft. Internal only.
 
 ---
 
