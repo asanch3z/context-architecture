@@ -31,15 +31,15 @@ A human-directed orchestration system where the infrastructure handles context t
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│                  HUMAN (Orchestrator)                     │
-│         Designs workflows, triggers dispatch,            │
-│         reviews output, holds quality gate                │
+│                  HUMAN (Orchestrator)                   │
+│         Designs workflows, triggers dispatch,           │
+│         reviews output, holds quality gate              │
 └──────────┬──────────────┬──────────────┬────────────────┘
            │              │              │
            ▼              ▼              ▼
 ┌──────────────┐ ┌──────────────┐ ┌──────────────────────┐
 │  Instance A  │ │  Instance B  │ │  Instance C          │
-│  (Claude)    │ │  (OpenAI)   │ │  (Browser Agent)     │
+│  (Claude)    │ │  (OpenAI)    │ │  (Browser Agent)     │
 │              │ │              │ │                      │
 │  Strategy,   │ │  Advisory,   │ │  Observation,        │
 │  analysis,   │ │  tone,       │ │  screen capture,     │
@@ -50,14 +50,14 @@ A human-directed orchestration system where the infrastructure handles context t
        │    summary     │    summary     │   + delivers
        ▼                ▼                ▼
 ┌─────────────────────────────────────────────────────────┐
-│              GOOGLE DRIVE (Shared Memory)                 │
-│                                                          │
-│  /summaries/     Session summaries from each instance    │
-│  /handoffs/      Directed context transfers              │
-│  /memory/        Global corrections, terminology,        │
-│                  active projects                         │
-│  /artifacts/     Shared deliverables                     │
-└──────────────────────────────────────────────────────────┘
+│              GOOGLE DRIVE (Shared Memory)               │
+│                                                         │
+│  /summaries/     Session summaries from each instance   │
+│  /handoffs/      Directed context transfers             │
+│  /memory/        Global corrections, terminology,       │
+│                  active projects                        │
+│  /artifacts/     Shared deliverables                    │
+└─────────────────────────────────────────────────────────┘
 ```
 
 ## Dispatch Workflow
