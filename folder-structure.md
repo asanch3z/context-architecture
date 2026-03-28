@@ -49,7 +49,7 @@ Persistent shared state that applies across all instances and all sessions.
 Shared deliverables that any instance might need to reference. These are outputs of the work (documents, frameworks, analyses), not session metadata. Named by project and artifact for easy identification.
 
 ### /dispatch_logs/
-Records of what the dispatch agent delivered, to whom, and when. The human reviews these at the start of each session to verify context was transferred correctly. Each log entry includes: what was delivered, target instance, timestamp, and any errors encountered.
+Records of what the dispatch agent delivered, to whom, and when. The human reviews these at the start of each session to verify context was transferred correctly. Each log entry includes: what was delivered, target instance, timestamp, dispatch mode (event-driven or scheduled), and any errors encountered.
 
 ## Setup
 
