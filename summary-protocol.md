@@ -37,6 +37,9 @@ Use this template at the end of every AI session to produce a structured summary
 ### Corrections to shared memory
 - [If any terminology, fact, or preference was corrected this session, note it here with which file in /memory/ should be updated. Example: "Update terminology.md: use 'multi-instance' not 'multi-agent' everywhere."]
 - [If none: "No corrections."]
+
+### Source verification
+- [For any factual claims introduced this session (about tools, organizations, timelines, capabilities, etc.), note whether they are: **sourced** (verified against a primary or reliable source), **inferred** (derived from context but not independently verified), or **unverified** (stated but not yet confirmed). This field prevents context degradation when summaries are consumed by other instances downstream.]
 ```
 
 ## Guidelines
