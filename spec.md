@@ -1,5 +1,5 @@
 # Cross-Platform AI Orchestration for Knowledge Work
-## Product Spec v0.3
+## Product Spec v0.4
 
 **Author:** Alex Sanchez
 **Date:** March 26, 2026
@@ -24,6 +24,14 @@ A human-directed orchestration system where the infrastructure handles context t
 **Summary Protocol:** A standardized format that every instance follows at session end. The protocol defines what gets captured (what happened, decisions made, open items, context needed by other instances, corrections to shared memory) so that summaries are machine-readable and consistently structured, regardless of which platform or instance produced them.
 
 **Dispatch Agent (Browser Automation):** A browser automation agent that reads new summaries from the shared memory layer and delivers relevant context to target instances across platforms. The agent navigates to the shared drive, identifies what's new, then navigates to the target platform and delivers the context via the platform's native input. The human triggers the dispatch cycle and reviews the dispatch log. The dispatch agent does not make decisions about what to deliver; the summary protocol and the human's configuration determine that.
+
+**Dispatch Modes:** The dispatch mechanism supports two operational modes:
+
+- **Event-driven dispatch:** Triggered when a session ends and a new summary is written to the shared memory layer. The human initiates the dispatch cycle, and the agent delivers context that has accumulated since the last dispatch. This is the primary mode for the MVP.
+
+- **Scheduled dispatch:** The dispatch agent runs on a defined cadence (e.g., every few hours, three times per day, or at fixed times) regardless of whether a new session has occurred. Scheduled dispatch catches updates that event-driven dispatch might miss: manual edits to shared memory files, corrections added outside a formal session, or summaries written by instances that don't trigger dispatch directly. It also ensures that context stays fresh across instances even during gaps between active sessions.
+
+Both modes write to `/dispatch_logs/` and are subject to the same human review. In practice, the two modes are complementary: event-driven dispatch handles immediate context flow after active sessions, while scheduled dispatch provides a background consistency layer.
 
 ---
 
@@ -63,9 +71,10 @@ A human-directed orchestration system where the infrastructure handles context t
 ## Dispatch Workflow
 
 ```
+Event-driven dispatch:
 1. Human completes a session in any instance
 2. Instance writes summary per protocol to shared memory (cloud file storage)
-3. Human triggers dispatch (or dispatch agent runs on schedule)
+3. Human triggers dispatch
 4. Dispatch agent reads new summaries from /summaries/
 5. For each summary with cross-instance context:
    a. Dispatch agent navigates to target platform
@@ -73,6 +82,14 @@ A human-directed orchestration system where the infrastructure handles context t
    c. Captures acknowledgment
    d. Writes dispatch log to shared memory
 6. Human reviews dispatch log at next session start
+
+Scheduled dispatch:
+1. Dispatch agent runs at a defined cadence (e.g., 3x daily)
+2. Agent scans /summaries/, /memory/, and /handoffs/ for changes since last sync
+3. For each change with cross-instance relevance:
+   a-d. Same delivery steps as event-driven
+4. Agent writes dispatch log noting scheduled (not event-driven) trigger
+5. Human reviews dispatch log at next session start
 ```
 
 ---
@@ -125,6 +142,9 @@ See [summary-protocol.md](summary-protocol.md) for the standalone template.
 
 ### Corrections to shared memory
 - [correction, if any, with which file in /memory/ to update]
+
+### Source verification
+- [For factual claims introduced this session: sourced, inferred, or unverified]
 ```
 
 ---
@@ -220,10 +240,10 @@ As a knowledge worker, I want the dispatch agent to capture output from a target
 - Strategy instance writes summaries to shared memory
 - Dispatch agent reads from shared memory and delivers to advisory instance via browser
 - Dispatch log written to shared memory
-- Human triggers dispatch manually
+- Human triggers dispatch manually (event-driven mode)
+- Scheduled dispatch on a defined cadence (e.g., 2-3x daily)
 
 **Out of scope for MVP:**
-- Scheduled/automated dispatch
 - Advisory instance writing summaries back to Drive (manual for now)
 - Bidirectional capture (US-7)
 - Filtered dispatch (US-6)
@@ -291,6 +311,7 @@ These approaches are complementary, not competing. A knowledge worker could use 
 
 ## Changelog
 
+- **v0.4 (March 27, 2026):** Added dispatch modes: event-driven and scheduled. Defined scheduled dispatch as a complement to event-driven dispatch for background context consistency. Updated dispatch workflow to document both modes. Moved scheduled dispatch into MVP scope.
 - **v0.3 (March 26, 2026):** Named the Context Sync Protocol. Added closed-loop architecture insight (context compounds, system learns over time). Added competitive positioning vs. multi-model tools (MultipleChat, etc.). Added evolution roadmap (four layers from POC to product). Added "How This Differs" comparison table.
 - **v0.2 (March 25, 2026):** Rewritten in PRD format. Problem grounded in observed workflow. Added system diagram, dispatch workflow, user stories with acceptance criteria, metrics with guardrails, MVP scope. Generalized for public consumption.
 - **v0.1 (March 25, 2026):** Initial draft. Internal only.
