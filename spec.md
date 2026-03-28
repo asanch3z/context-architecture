@@ -13,13 +13,13 @@ Knowledge workers who operate multiple AI instances across different platforms (
 
 ## Opportunity
 
-Nobody has built coordination infrastructure for multi-instance, multi-platform AI workflows outside of software development. The entire multi-agent tooling landscape (Claude Code Agent Teams, Gas Town, Multiclaude, Ruflo) is built for engineering: agents writing code, running tests, reviewing PRs. Knowledge workers (consultants, strategists, analysts, researchers) who have moved past single-chat AI usage have no equivalent. They're building their own systems by hand, which means the ones who are furthest ahead are also the ones most constrained by the lack of infrastructure. A lightweight coordination layer using existing tools (Google Drive for shared state, browser automation for dispatch, structured protocols for summaries) could demonstrate the architecture without requiring new infrastructure, serve as a proof of concept for a broader product, and establish a reference pattern for a space where everyone is talking about context but nobody has shipped a working system for non-engineering knowledge work.
+Nobody has built coordination infrastructure for multi-instance, multi-platform AI workflows outside of software development. The entire multi-agent tooling landscape (Claude Code Agent Teams, Gas Town, Multiclaude, Ruflo) is built for engineering: agents writing code, running tests, reviewing PRs. Knowledge workers (consultants, strategists, analysts, researchers) who have moved past single-chat AI usage have no equivalent. They're building their own systems by hand, which means the ones who are furthest ahead are also the ones most constrained by the lack of infrastructure. A lightweight coordination layer using existing tools (cloud file storage for shared state, browser automation for dispatch, structured protocols for summaries) could demonstrate the architecture without requiring new infrastructure, serve as a proof of concept for a broader product, and establish a reference pattern for a space where everyone is talking about context but nobody has shipped a working system for non-engineering knowledge work.
 
 ## Solution
 
 A human-directed orchestration system where the infrastructure handles context transfer, state management, and cross-platform coordination, while the human retains all strategic decisions, quality gates, and prompt design. Three components:
 
-**Shared Memory Layer (Google Drive):** A structured folder that serves as the system's shared state. Every instance writes session summaries to a common location. Every instance can read what other instances have produced. The folder structure encodes what type of information lives where: summaries, directed handoffs, global corrections, shared artifacts.
+**Shared Memory Layer (Cloud File Storage):** A structured folder in any cloud file storage service (Google Drive, Box, Dropbox, or equivalent) that serves as the system's shared state. Every instance writes session summaries to a common location. Every instance can read what other instances have produced. The folder structure encodes what type of information lives where: summaries, directed handoffs, global corrections, shared artifacts.
 
 **Summary Protocol:** A standardized format that every instance follows at session end. The protocol defines what gets captured (what happened, decisions made, open items, context needed by other instances, corrections to shared memory) so that summaries are machine-readable and consistently structured, regardless of which platform or instance produced them.
 
@@ -64,7 +64,7 @@ A human-directed orchestration system where the infrastructure handles context t
 
 ```
 1. Human completes a session in any instance
-2. Instance writes summary per protocol to shared memory (Google Drive)
+2. Instance writes summary per protocol to shared memory (cloud file storage)
 3. Human triggers dispatch (or dispatch agent runs on schedule)
 4. Dispatch agent reads new summaries from /summaries/
 5. For each summary with cross-instance context:
@@ -215,11 +215,11 @@ As a knowledge worker, I want the dispatch agent to capture output from a target
 ## MVP Scope
 
 **In scope:**
-- Shared memory folder structure (Google Drive)
+- Shared memory folder structure (cloud file storage)
 - Summary protocol document
-- Strategy instance writes summaries to Google Drive
-- Dispatch agent reads from Google Drive and delivers to advisory instance via browser
-- Dispatch log written to Google Drive
+- Strategy instance writes summaries to shared memory
+- Dispatch agent reads from shared memory and delivers to advisory instance via browser
+- Dispatch log written to shared memory
 - Human triggers dispatch manually
 
 **Out of scope for MVP:**
@@ -279,9 +279,9 @@ These approaches are complementary, not competing. A knowledge worker could use 
 
 ## Evolution Roadmap
 
-**Layer 1 (current spec, POC):** Google Drive as shared state, summary protocols, browser automation for dispatch. File-based, validates the pattern. Buildable in hours with zero additional cost.
+**Layer 1 (current spec, POC):** Cloud file storage (Google Drive, Box, Dropbox, or equivalent) as shared state, summary protocols, browser automation for dispatch. File-based, validates the pattern. Buildable in hours with zero additional cost.
 
-**Layer 2 (API middleware):** Universal context store (database), platform adapters inject context into API calls, closed-loop where each session both consumes and produces context. The store replaces Google Drive as the persistence layer. Each platform adapter knows how to read from and write to its platform's native context mechanism. Context depth is maintained because memory is injected at all three levels (global, project, instance) on every API call, and summaries flow back to update the store.
+**Layer 2 (API middleware):** Universal context store (database), platform adapters inject context into API calls, closed-loop where each session both consumes and produces context. The store replaces the file-based layer as the persistence mechanism. Each platform adapter knows how to read from and write to its platform's native context mechanism. Context depth is maintained because memory is injected at all three levels (global, project, instance) on every API call, and summaries flow back to update the store.
 
 **Layer 3 (protocol standard):** A Context Sync Protocol that platforms themselves support natively. Platforms expose endpoints for "here's what changed in this user's context since the last sync" and "here's a context update from another platform, incorporate it." This eliminates the need for middleware or browser automation. Requires industry adoption. One person defines the spec and advocates for it.
 
