@@ -2,16 +2,12 @@
 
 Use this template at the end of every AI session to produce a structured summary that other instances can consume. The protocol ensures consistency across platforms and instances, making context transfer reliable regardless of who produced the summary or who will read it.
 
----
-
 ## How to Use
 
 1. Copy this template into your AI instance's instructions or paste it at the end of a session
 2. Ask the instance to produce a summary following this format
-3. Save the output to your shared memory layer (e.g., Google Drive /summaries/ folder)
+3. Save the output to your shared memory layer (`/summaries/` folder in your cloud file storage)
 4. Name the file: `[instance_name]_[YYYY-MM-DD].md`
-
----
 
 ## Template
 
@@ -42,8 +38,6 @@ Use this template at the end of every AI session to produce a structured summary
 - [If any terminology, fact, or preference was corrected this session, note it here with which file in /memory/ should be updated. Example: "Update terminology.md: use 'multi-instance' not 'multi-agent' everywhere."]
 - [If none: "No corrections."]
 ```
-
----
 
 ## Guidelines
 
