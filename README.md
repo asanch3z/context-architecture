@@ -4,7 +4,7 @@ Knowledge workers who operate multiple AI instances across different platforms h
 
 ## What This Is
 
-A methodology (not software) for orchestrating multiple AI instances across platforms like Claude, OpenAI, and browser-based agents, with shared memory, structured handoff protocols, and automated dispatch. Everything here is immediately usable with zero installation.
+A methodology (not software) for orchestrating multiple AI instances across platforms like Claude, OpenAI, and browser-based agents, with shared memory, structured handoff protocols, and automated dispatch. Dispatch can be event-driven (triggered after a session) or scheduled on a recurring cadence for background consistency. Everything here is immediately usable with zero installation.
 
 At its core is the **Context Sync Protocol**: think of it as MCP (Model Context Protocol) for memory state rather than tool access. MCP gives a model access to external tools. The Context Sync Protocol gives a model access to the evolving context of a multi-instance system.
 
@@ -30,7 +30,7 @@ The key difference: multi-model tools are stateless per prompt. Context Architec
 
 | File | Description |
 |------|-------------|
-| [spec.md](spec.md) | Full product spec (v0.3): problem, opportunity, solution, Context Sync Protocol, system diagram, dispatch workflow, user stories, metrics, competitive positioning, evolution roadmap |
+| [spec.md](spec.md) | Full product spec (v0.4): problem, opportunity, solution, Context Sync Protocol, dispatch modes, system diagram, dispatch workflow, user stories, metrics, competitive positioning, evolution roadmap |
 | [summary-protocol.md](summary-protocol.md) | Standalone template for structured session summaries that any instance can produce and any other instance can consume |
 | [folder-structure.md](folder-structure.md) | Specification for the shared memory layer (Google Drive folder organization) |
 
@@ -84,7 +84,7 @@ The human is always the orchestrator, decision-maker, and quality gate. The infr
 
 ## Evolution Roadmap
 
-**Layer 1 (current, POC):** File-based shared memory (Google Drive), summary protocols, browser automation for dispatch. Validates the pattern.
+**Layer 1 (current, POC):** File-based shared memory (Google Drive), summary protocols, browser automation for dispatch. Supports both event-driven dispatch (triggered after sessions) and scheduled dispatch (recurring cadence for background sync). Validates the pattern.
 
 **Layer 2 (API middleware):** Universal context store (database), platform adapters inject context into API calls. Closed-loop where sessions consume and produce context. Memory injected at three levels (global, project, instance).
 
@@ -103,7 +103,7 @@ You don't need to implement everything at once. The summary protocol alone will 
 
 ## Status
 
-This is a working draft (v0.3), published to establish the pattern and invite iteration. The architecture is based on a system the author has been operating in production for consulting work since late 2024. The spec will evolve as the proof of concept develops.
+This is a working draft (v0.4), published to establish the pattern and invite iteration. The architecture is based on a system the author has been operating in production for consulting work since late 2024. The spec will evolve as the proof of concept develops.
 
 ## Author
 
