@@ -18,7 +18,7 @@ Product managers, consultants, strategists, analysts, researchers, and other kno
 
 The entire multi-agent tooling landscape (Claude Code Agent Teams, Gas Town, Multiclaude, Ruflo) is built for software development: agents writing code, running tests, reviewing PRs. Multi-model tools like MultipleChat solve answer verification by sending the same prompt to multiple models and merging responses. Neither addresses the problem of sustained context coordination across ongoing work.
 
-Nobody has published a working system for knowledge workers who need multiple specialized AI instances to stay in sync across platforms, across sessions, and across weeks or months of engagement. This repo is a first attempt at defining that infrastructure.
+While orchestration frameworks exist for coding agents on single platforms, no widely adopted system addresses sustained context coordination across multiple platforms for knowledge work. This repo is a first attempt at defining that infrastructure.
 
 ## How This Differs from Multi-Model Tools
 
