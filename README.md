@@ -103,7 +103,7 @@ You don't need to implement everything at once. The summary protocol alone will 
 
 ## Status
 
-This is a working draft (v0.4), published to establish the pattern and invite iteration. The architecture is based on a system the author has been operating in production for consulting work since late 2024. The spec will evolve as the proof of concept develops.
+This is a working draft (v0.4), published to establish the pattern and invite iteration. The architecture is based on a system the author has been operating in production for consulting work since early 2026. The spec will evolve as the proof of concept develops.
 
 ## Author
 

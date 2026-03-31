@@ -256,7 +256,7 @@ As a knowledge worker, I want the dispatch agent to capture output from a target
 
 ## Background
 
-This architecture is based on a system the author has been operating in production for consulting work since late 2024. The system uses specialized AI instances across Claude (strategy and analysis), OpenAI (advisory and client communications), and Anthropic's Cowork platform (browser-based observation and automation), coordinated through manual context handoffs with structured protocols.
+This architecture is based on a system the author has been operating in production for consulting work since early 2026. The system uses specialized AI instances across Claude (strategy and analysis), OpenAI (advisory and client communications), and Anthropic's Cowork platform (browser-based observation and automation), coordinated through manual context handoffs with structured protocols.
 
 The spec documents what works, what doesn't, and what infrastructure would make the system more efficient. It is published as a working draft to establish the pattern and invite iteration from other knowledge workers building similar systems.
 
